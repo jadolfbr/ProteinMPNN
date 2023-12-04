@@ -115,6 +115,8 @@ def parse_PDB_biounits(x, atoms=['N','CA','C'], chain=None):
         if resa not in seq[resn]: 
             seq[resn][resa] = resi
 
+        print(resn, min_resn, max_resn)
+
         if atom not in xyz[resn][resa]:
           xyz[resn][resa][atom] = np.array([x,y,z])
 
@@ -124,14 +126,16 @@ def parse_PDB_biounits(x, atoms=['N','CA','C'], chain=None):
       for resn in range(min_resn,max_resn+1):
         if resn in seq:
           for k in sorted(seq[resn]): seq_.append(aa_3_N.get(seq[resn][k],20))
-        else: seq_.append(20)
+        #else: seq_.append(20)
         if resn in xyz:
           for k in sorted(xyz[resn]):
             for atom in atoms:
               if atom in xyz[resn][k]: xyz_.append(xyz[resn][k][atom])
               else: xyz_.append(np.full(3,np.nan))
-        else:
-          for atom in atoms: xyz_.append(np.full(3,np.nan))
+        #else:
+        #  for atom in atoms: xyz_.append(np.full(3,np.nan))
+      print("Seq_", seq_)
+
       return np.array(xyz_).reshape(-1,len(atoms),3), N_to_AA(np.array(seq_))
   except TypeError:
       return 'no_chain', 'no_chain'
@@ -177,6 +181,7 @@ def parse_PDB(path_to_pdb, input_chain_list=None, ca_only=False):
                     coords_dict_chain['O_chain_' + letter] = xyz[:, 3, :].tolist()
                 my_dict['coords_chain_'+letter]=coords_dict_chain
                 s += 1
+            print("My Dict:", my_dict)
         fi = biounit.rfind("/")
         my_dict['name']=biounit[(fi+1):-4]
         my_dict['num_of_chains'] = s
