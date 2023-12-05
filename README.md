@@ -18,6 +18,40 @@ Code organization:
 * `outputs/` - outputs from examples
 * `colab_notebooks/` - Google Colab examples
 * `training/` - code and data to retrain the model
+
+NOTE: This fork has disabled 'gap' detection, which was based on pdb numbering, and not anything physical.  If you are designing next to an actual gap, this should probably be modeled first anyway. 
+
+Helper Scripts:
+* `run_proteinMPNN_and_thread.py` - Use PyRosetta for PDB Numbering and Threading. Main proteinMPNN directory must be on path. Does not deal with tied residues yet. 
+Example: 
+   `run_proteinMPNN_and_thread.py --design 3HTN_test.pdb,93-106A:137-143C  --n_sample_designs 5 --mpnn_dir /Users/jadolfbr/projects/ProteinMPNN --outdir two_sides`
+   
+   This will produce a few files with fastas, CSVs, threaded PDBs, and a per-position table with native residues and designed residues using PDB numbering. This makes it much easier to design proteins. 
+   
+   You can specify designs either through a file or cmd-line.  Multiple proteins can be designed at once, and multiple design strategies can also be attempted. 
+   
+   ```
+     --design DESIGN, -d DESIGN
+                        pdb_path,positions; OR .txt file, one per line, comma separated. No header. If want to design subsequent pdbs the same way,then
+                        subsequent designs can have :: as positions to indicate it will be the same as previous designs.Positions defined as
+                        12-24A:2-6C:1/2/3.C/4-6/7B. Maybe PyMOL selection string sometime.Last letter is always chain. PDB numbering. Insertion codes after dot.
+                        Uses PyRosetta for parsingNumbering sets MUST be in order or ProteinMPNN freaks out. IE, order of the PDB - chain A, B, C etc.
+  --mpnn_dir MPNN_DIR, -m MPNN_DIR
+                        Directory for proteinMPNN
+  --model_weights MODEL_WEIGHTS, -l MODEL_WEIGHTS
+                        020 means that .02A noise was added during training. This usually doesn't need to be changed.
+  --model_type MODEL_TYPE, -e MODEL_TYPE
+                        Type of model weights. These should be in MPNN directory. vanilla_model_weights is the other one we have right now.
+  --outdir OUTDIR, -o OUTDIR
+  --omit_AAs OMIT_AAS, -a OMIT_AAS
+                        Omit this list of Amino Acids. WMC for oxidation/reduction. YTKS for phospho and ubiquitination.
+  --n_sample_designs N_SAMPLE_DESIGNS, -n N_SAMPLE_DESIGNS
+                        Number of designs per sequence. Use more for de novo design or protein remodeling.
+  --sampling_temp SAMPLING_TEMP, -t SAMPLING_TEMP
+                        Sampling temp for ProteinMPNN. .0001 used for binder design in RFDiffusion. Lower the temp, generally lowers energies from natives, but
+                        may not be able to sample much lower energies
+  --skip_threading, -k  Skip threading the sequence onto the PDB, which takes time and can be a bit buggy I bet if NCAAs are involved.
+  ```
 -----------------------------------------------------------------------------------------------------
 Input flags for `protein_mpnn_run.py`:
 ```
