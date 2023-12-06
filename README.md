@@ -22,9 +22,9 @@ Code organization:
 NOTE: This fork has disabled 'gap' detection, which was based on pdb numbering, and not anything physical.  If you are designing next to an actual gap, this should probably be modeled first anyway. 
 
 Helper Scripts:
-* `run_proteinMPNN_and_thread.py` - Use PyRosetta for PDB Numbering and Threading. Main proteinMPNN directory must be on path. Does not deal with tied residues yet. 
+* `protein_mpnn_run_thread.py` - Use PyRosetta for PDB Numbering and Threading. Main proteinMPNN directory must be on PythonPath. Does not deal with tied residues yet. 
 Example: 
-   `run_proteinMPNN_and_thread.py --design 3HTN_test.pdb,93-106A:137-143C  --n_sample_designs 5 --mpnn_dir /Users/jadolfbr/projects/ProteinMPNN --outdir two_sides`
+   `protein_mpnn_run_thread.py --design 3HTN_test.pdb,93-106A:137-143C  --n_sample_designs 5 --mpnn_dir /Users/jadolfbr/projects/ProteinMPNN --outdir two_sides`
    
    This will produce a few files with fastas, CSVs, threaded PDBs, and a per-position table with native residues and designed residues using PDB numbering. This makes it much easier to design proteins. 
    

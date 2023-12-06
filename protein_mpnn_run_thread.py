@@ -8,12 +8,12 @@ import os,sys
 
 import pandas
 
-import cse_code.pdb_numbering  as pdb_numbering
+import pdb_numbering
 from pyrosetta import *
 from pyrosetta.rosetta import *
 from collections import defaultdict
-from cse_code.protein_mpnn import *
-from cse_code.pyrosetta import thread_at_position, pack_around_region, pymol_selection_from_reslist
+from protein_mpnn_class import *
+from pyrosetta_util import thread_at_position, pack_around_region, pymol_selection_from_reslist
 
 from pyrosetta.rosetta.core.pose import *
 import statistics
